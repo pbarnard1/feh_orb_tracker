@@ -2,7 +2,10 @@ package com.pabarnard.feh_orb_tracker.controllers;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -66,15 +69,18 @@ public class MainController {
     	// Use session to figure out what month is currently being viewed - if nothing stored,
     	// set shown month to be the current month
     	
-    	// Also proposed to add in session: earliest day, latest day - update accordingly when new month is added
     	/*
     	 * TO DO:
-    	 * 1. Stylize registration/log-in form with Bootstrap.
-    	 * 2. Stylize main page with Bootstrap (if possible):
-    	 *    A. Add tooltip for each entry in table when hovering over each cell.
-    	 *    B. Colorize table.
-    	 *    C. Update forms - maybe make them dynamic if possible.
-    	 *    D. If possible: add color for current day.
+    	 * 1. If possible: add color for current day - only if time permits.
+    	 * 2. Ensure user name is unique.
+    	 * 3. Add database with banners and allow one to get the number of orbs during that banner.
+    	 *    Also for future banners, add number of orbs before start of banner as well.
+    	 * 4. Add database for future orbs for each month.
+    	 * 5. Automatically add orbs based on things like log-in bonuses, new/special heroes banners, Voting Gauntlet, etc.  Allow custom amounts
+    	 *    (e.g. instead of 2/day or 1/1/1/1/2/1/1/1/1/3, maybe something like 1/2/3/4/5).
+    	 * 6. Limit it so that only I can edit banners and add months and edit orbs.
+    	 * 7. Look at Spring Security to help with this.
+    	 * 8. Make mobile friendly - add calendar view and simple view.
     	 */
 		User myUser = userService.findUserById(myId); // Get user
 		model.addAttribute("user", myUser);
@@ -97,12 +103,28 @@ public class MainController {
 		FEHDay newestDay = fehDayService.findNewestDay();
 		model.addAttribute("earliestDay",earliestDay);
 		model.addAttribute("newestDay",newestDay);
+		// Show months in terms of text for navigating
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMM YYYY");
+		if (!foundDays.contains(earliestDay)) {
+			LocalDate startOfPrevMonth = firstDay.minusMonths(1);
+			model.addAttribute("prevMonth",startOfPrevMonth.format(dateFormatter));
+		}
+		if (!foundDays.contains(newestDay)) {
+			LocalDate startOfNextMonth = firstDay.plusMonths(1);
+			model.addAttribute("nextMonth",startOfNextMonth.format(dateFormatter));
+		}
+		DateTimeFormatter fullMonthFormatter = DateTimeFormatter.ofPattern("MMMM YYYY");
+		model.addAttribute("thisMonth",firstDay.format(fullMonthFormatter));
+		// For orb form
+		model.addAttribute("totalOrbs",session.getAttribute("totalOrbs"));
+		model.addAttribute("startingDate",session.getAttribute("startingDate"));
+		model.addAttribute("endingDate",session.getAttribute("endingDate"));
 		return "main_page.jsp";
 	}
 	
 	@PostMapping("/calculate_orbs")
 	public String calculateOrbs(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate,
-			RedirectAttributes redirectAttributes) {
+			RedirectAttributes redirectAttributes, HttpSession session) {
 		LocalDate newStart = LocalDate.parse(startDate);
 		LocalDate newEnd = LocalDate.parse(endDate);
 		if (newStart.isAfter(newEnd)) {
@@ -124,14 +146,21 @@ public class MainController {
 	    for (FEHDay fDay: foundDays) {
 	    	totalOrbs += fDay.getTotalOrbs();
 	    }
-	    redirectAttributes.addFlashAttribute("totalOrbs", totalOrbs);
-	    redirectAttributes.addFlashAttribute("startingDate",startDate);
-	    redirectAttributes.addFlashAttribute("endingDate",endDate);
+	    session.setAttribute("totalOrbs", totalOrbs);
+	    session.setAttribute("startingDate",startDate);
+	    session.setAttribute("endingDate",endDate);
+	    redirectAttributes.addFlashAttribute("preload","preload"); // To allow modal to load
 		return "redirect:/main";
 	}
 	
 	@PutMapping("/edit_orb_count")
-	public String editOrbCount(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session) {
+	public String editOrbCount(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session,
+			RedirectAttributes redirectAttributes) {
+		if (result.hasErrors()) {
+			System.out.println("Errors found");
+			redirectAttributes.addFlashAttribute("orbError","Value must be an integer");
+			return "redirect:/main";
+		}
 		int orbCount = user.getOrbBalance(); // Get value from form
 		Long myId = (Long) session.getAttribute("userId");
 		User myUser = userService.findUserById(myId); // Get user
@@ -175,6 +204,7 @@ public class MainController {
     	LocalDate firstDay = earliestDay.getOrbDate().toInstant().atZone(defaultZoneId).toLocalDate();
     	LocalDate newFirstDay = firstDay.minusMonths(1);
     	addNewMonth(newFirstDay);
+    	session.setAttribute("firstDayOfMonth", newFirstDay); // Show new month
 		return "redirect:/main";
 	}
 	
@@ -193,6 +223,7 @@ public class MainController {
     	// Get day at start of next month - the new month to be added
     	LocalDate newFirstDay = startOfThisMonth.plusMonths(1);
     	addNewMonth(newFirstDay);
+    	session.setAttribute("firstDayOfMonth", newFirstDay); // Show new month
 		return "redirect:/main";
 	}
 	
@@ -224,8 +255,10 @@ public class MainController {
     	Long myId = (Long) session.getAttribute("userId");
     	User myUser = userService.findUserById(myId);
     	model.addAttribute("user",myUser);
-    	
 		if (result.hasErrors()) {
+			Long dayId = Long.parseLong(day_id);
+			FEHDay myDay = fehDayService.readDay(dayId);
+			model.addAttribute("fehDay", myDay); // MUST have name match the model attribute to pre-populate form
 			System.out.println("Errors found");
         	model.addAttribute("errorMessage", "Unable to edit day");
             return "edit_day.jsp";
@@ -250,6 +283,9 @@ public class MainController {
     	LocalDate currentDayOfMonth = LocalDate.of(firstDayOfMonth.getYear(), firstDayOfMonth.getMonthValue(), firstDayOfMonth.getDayOfMonth());
 		ZoneId defaultZoneId = ZoneId.systemDefault(); // Get default time zone
 		int totalOrbs; // Number of orbs for that day
+		// FEH launched Thursday, February 2, 2017, so we'll treat Tuesday, 1/24/2017, as start of season 0 and 1/31/2017 as start of season 1
+		LocalDate startOfSeasonZero = LocalDate.of(2017, Month.JANUARY, 24);
+		long seasonNumber; // Season number
 		// Loop to add days to database
     	while (currentDayOfMonth.isBefore(startOfNextMonth)) {
     		// Create new day
@@ -262,20 +298,32 @@ public class MainController {
     		switch (dayOfWeek) {
     			case MONDAY:
     				newDay.setArenaOrbs(4);
-    				newDay.setArenaDesc("Arena orb rewards for end of season");
+    			    seasonNumber = ChronoUnit.WEEKS.between(startOfSeasonZero, currentDayOfMonth);
+    				newDay.setArenaDesc("Arena orb rewards for end of season "+Long.toString(seasonNumber));
     				totalOrbs = newDay.getTotalOrbs();
     				totalOrbs += 4;
     				newDay.setTotalOrbs(totalOrbs);
     				break;
     			case TUESDAY:
-    				newDay.setArenaOrbs(1);
-    				newDay.setArenaDesc("Arena orb for 4-match streak");
-    				totalOrbs = newDay.getTotalOrbs();
-    				totalOrbs += 1;
-    				newDay.setTotalOrbs(totalOrbs);
+    				seasonNumber = ChronoUnit.WEEKS.between(startOfSeasonZero, currentDayOfMonth);
+    				if (seasonNumber >= 68) { // Arena streak orb added starting season 67 (May 9 [Wednesday instead of Tuesday] - May 14, 2018)
+    					newDay.setArenaOrbs(1);
+        				newDay.setArenaDesc("4-match streak for season "+Long.toString(seasonNumber));
+        				totalOrbs = newDay.getTotalOrbs();
+        				totalOrbs += 1;
+        				newDay.setTotalOrbs(totalOrbs);
+    				}
     				break;
 				case WEDNESDAY:
-				    				
+					seasonNumber = ChronoUnit.WEEKS.between(startOfSeasonZero, currentDayOfMonth);
+					// SPECIAL CASE: season 67 only started on Wednesday
+					if (seasonNumber == 67) { // Arena streak orb added starting season 67 (May 9 [Wednesday instead of Tuesday] - May 14, 2018)
+    					newDay.setArenaOrbs(1);
+        				newDay.setArenaDesc("4-match streak for season "+Long.toString(seasonNumber));
+        				totalOrbs = newDay.getTotalOrbs();
+        				totalOrbs += 1;
+        				newDay.setTotalOrbs(totalOrbs);
+    				}
 					break;
 				case THURSDAY:
 					

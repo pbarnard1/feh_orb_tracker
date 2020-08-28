@@ -1,11 +1,14 @@
 package com.pabarnard.feh_orb_tracker.controllers;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,11 +48,31 @@ public class UserController {
     
     @PostMapping(value="/registration")
     public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult result, HttpSession session,
-    		RedirectAttributes redirectAttributes) {
+    		RedirectAttributes redirectAttributes, Model model) {
         userValidator.validate(user, result); // Validate with custom validations now
         userValidator.validateEmail(user, result, userService); // Validate with custom validations now
         if(result.hasErrors()) {
+        	// The lines below are added by me except for the return part
         	System.out.println(result.getAllErrors());
+        	
+        	List <FieldError> allErrors = result.getFieldErrors();
+        	for (FieldError er : allErrors) {
+        		String errorField = er.getField();
+        		switch(errorField) {
+        			case "userName":
+        				model.addAttribute("userError","User name must be unique");
+        				model.addAttribute("invalidUserName","is-invalid");
+        				break;
+        			case "email":
+        				model.addAttribute("emailError","Someone already registered with this e-mail");
+        				model.addAttribute("invalidEmail","is-invalid");
+        				break;
+        			case "passwordConfirmation":
+        				model.addAttribute("passwordError","Password must be at least 8 characters and agree");
+        				model.addAttribute("invalidPassword","is-invalid");
+        				break;
+        		}
+        	}
         	redirectAttributes.addFlashAttribute("registrationError", "Unable to register new user");
     		return "login_registration.jsp"; // Go back to registration page - do NOT redirect, otherwise error messages will NOT pop up
         }
@@ -69,6 +92,7 @@ public class UserController {
     	} else {
     		System.out.println("Cannot log in");
     		model.addAttribute("loginError", "E-mail and/or password are incorrect");
+    		model.addAttribute("invalidLogin","is-invalid"); // For displaying errors in log-in form
     		model.addAttribute("email", email);
     		// redirectAttributes.addFlashAttribute("loginError", "E-mail and/or password are incorrect");
     		return "login_registration.jsp"; // Send back to log-in page - do NOT redirect, otherwise error messages will NOT pop up

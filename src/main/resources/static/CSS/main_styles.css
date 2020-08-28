@@ -1,0 +1,59 @@
+table {
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid black;
+}
+
+.mainTable {
+	margin-left: 1%;
+	margin-right: 1%;
+	border: 3px solid black;
+}
+
+tbody > tr:nth-child(2n+1) {
+	background-color: lightpink;
+}
+tbody > tr:nth-child(2n+2) {
+	background-color: lightskyblue;
+}
+
+td:nth-child(n+2), th:nth-child(n+2) {
+	text-align: center;
+	min-width: 50px;
+}
+
+th:first-child {
+	min-width: 250px;
+}
+
+td > a {
+	color: black;
+}
+.table_bar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.table_bar span {
+	font-size: 36px;
+	padding-left: 36px;
+	padding-right: 36px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.main-container {
+	margin-top: 70px;
+}
+
+.leadCell {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.boldCell {
+	font-weight: bold;
+}

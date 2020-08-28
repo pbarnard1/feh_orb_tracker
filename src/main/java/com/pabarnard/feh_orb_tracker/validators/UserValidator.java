@@ -27,7 +27,9 @@ public class UserValidator implements Validator {
         	// user is from userValidator.validate(user, result)
             errors.rejectValue("passwordConfirmation", "Match");
         }
-        
+        if (user.getPasswordConfirmation().length() < 8) { // Added by me: password must be 8 or more characters
+        	errors.rejectValue("passwordConfirmation", "Match");
+        }
     }
 	
 	// Check to make sure e-mail is unique

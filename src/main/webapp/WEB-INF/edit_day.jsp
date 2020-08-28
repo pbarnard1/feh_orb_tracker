@@ -12,154 +12,429 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Other meta tags -->
     <meta name="Description" content="Edit day"> <!-- Explanation that shows up in search engines goes here.-->
-    <!--<script src="js/time.js"></script>-->
-    <!--<link rel="stylesheet" type="text/css" href="CSS/time_styles.css">--><!-- CSS page goes here - check the name of the file and make sure it matches with the one for href!-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="/js/edit_day.js"></script>
+    <link rel="stylesheet" type="text/css" href="/CSS/edit_day.css">
 </head>
 <body>
 	<h1>Edit <fmt:formatDate pattern = "MMMM d, yyyy" value = "${fehDay.orbDate}" /></h1>
-	
-	
-	<form:form action="/days/${fehDay.id}/edit" method="post" modelAttribute="fehDay">
+	<form:form id="editDayForm" action="/days/${fehDay.id}/edit" method="post" modelAttribute="fehDay">
     	<input type="hidden" name="_method" value="put">
     	<p><c:out value="${errorMessage}"/></p>
         
-        <p>
-            <form:label path="storyParalogueOrbs">Story/Paralogue orbs:</form:label>
-            <form:errors path="storyParalogueOrbs"/>
-            <form:input type="number" path="storyParalogueOrbs"/>
-            <form:label path="storyParalogueDesc">Description:</form:label>
-            <form:errors path="storyParalogueDesc"/>
-            <form:input path="storyParalogueDesc"/>
-        </p>
-        <p>
-            <form:label path="chainChallengeOrbs">Chain Challenge orbs:</form:label>
-            <form:errors path="chainChallengeOrbs"/>
-            <form:input type="number" path="chainChallengeOrbs"/>
-            <form:label path="chainChallengeDesc">Description:</form:label>
-            <form:errors path="chainChallengeDesc"/>
-            <form:input path="chainChallengeDesc"/>
-        </p>
-        <p>
-            <form:label path="squadAssaultOrbs">Squad Assault orbs:</form:label>
-            <form:errors path="squadAssaultOrbs"/>
-            <form:input type="number" path="squadAssaultOrbs"/>
-            <form:label path="squadAssaultDesc">Description:</form:label>
-            <form:errors path="squadAssaultDesc"/>
-            <form:input path="squadAssaultDesc"/>
-        </p>
-        <p>
-            <form:label path="arenaOrbs">Arena orbs:</form:label>
-            <form:errors path="arenaOrbs"/>
-            <form:input type="number" path="arenaOrbs"/>
-            <form:label path="arenaDesc">Description:</form:label>
-            <form:errors path="arenaDesc"/>
-            <form:input path="arenaDesc"/>
-        </p>
-        <p>
-            <form:label path="rivalDomainsOrbs">Rival Domains orbs:</form:label>
-            <form:errors path="rivalDomainsOrbs"/>
-            <form:input type="number" path="rivalDomainsOrbs"/>
-            <form:label path="rivalDomainsDesc">Description:</form:label>
-            <form:errors path="rivalDomainsDesc"/>
-            <form:input path="rivalDomainsDesc"/>
-        </p>
-        <p>
-            <form:label path="heroBattleOrbs">Hero Battle orbs:</form:label>
-            <form:errors path="heroBattleOrbs"/>
-            <form:input type="number" path="heroBattleOrbs"/>
-            <form:label path="heroBattleDesc">Description:</form:label>
-            <form:errors path="heroBattleDesc"/>
-            <form:input path="heroBattleDesc"/>
-        </p>
-        <p>
-            <form:label path="tacticsDrillOrbs">Tactics Drill orbs:</form:label>
-            <form:errors path="tacticsDrillOrbs"/>
-            <form:input type="number" path="tacticsDrillOrbs"/>
-            <form:label path="tacticsDrillDesc">Description:</form:label>
-            <form:errors path="tacticsDrillDesc"/>
-            <form:input path="tacticsDrillDesc"/>
-        </p>
-        <p>
-            <form:label path="allegianceBattleOrbs">Allegiance Battle orbs:</form:label>
-            <form:errors path="allegianceBattleOrbs"/>
-            <form:input type="number" path="allegianceBattleOrbs"/>
-            <form:label path="allegianceBattleDesc">Description:</form:label>
-            <form:errors path="allegianceBattleDesc"/>
-            <form:input path="allegianceBattleDesc"/>
-        </p>
-        <p>
-            <form:label path="tempestTrialsOrbs">Tempest Trial orbs:</form:label>
-            <form:errors path="tempestTrialsOrbs"/>
-            <form:input type="number" path="tempestTrialsOrbs"/>
-            <form:label path="tempestTrialsDesc">Description:</form:label>
-            <form:errors path="tempestTrialsDesc"/>
-            <form:input path="tempestTrialsDesc"/>
-        </p>
-        <p>
-            <form:label path="tapBattleOrbs">Tap Battle orbs:</form:label>
-            <form:errors path="tapBattleOrbs"/>
-            <form:input type="number" path="tapBattleOrbs"/>
-            <form:label path="tapBattleDesc">Description:</form:label>
-            <form:errors path="tapBattleDesc"/>
-            <form:input path="tapBattleDesc"/>
-        </p>
-        <p>
-            <form:label path="grandConquestRokkrSiegesOrbs">Grand Conquest/Rokkr Sieges orbs:</form:label>
-            <form:errors path="grandConquestRokkrSiegesOrbs"/>
-            <form:input type="number" path="grandConquestRokkrSiegesOrbs"/>
-            <form:label path="grandConquestRokkrSiegesDesc">Description:</form:label>
-            <form:errors path="grandConquestRokkrSiegesDesc"/>
-            <form:input path="grandConquestRokkrSiegesDesc"/>
-        </p>
-        <p>
-            <form:label path="forgingBondsHallOfFormsOrbs">Forging Bonds/Hall of Forms orbs:</form:label>
-            <form:errors path="forgingBondsHallOfFormsOrbs"/>
-            <form:input type="number" path="forgingBondsHallOfFormsOrbs"/>
-            <form:label path="forgingBondsHallOfFormsDesc">Description:</form:label>
-            <form:errors path="forgingBondsHallOfFormsDesc"/>
-            <form:input path="forgingBondsHallOfFormsDesc"/>
-        </p>
-        <p>
-            <form:label path="lostLoreOrbs">Lost Lore orbs:</form:label>
-            <form:errors path="lostLoreOrbs"/>
-            <form:input type="number" path="lostLoreOrbs"/>
-            <form:label path="lostLoreDesc">Description:</form:label>
-            <form:errors path="lostLoreDesc"/>
-            <form:input path="lostLoreDesc"/>
-        </p>
-        <p>
-            <form:label path="questOrbs">Quest orbs:</form:label>
-            <form:errors path="questOrbs"/>
-            <form:input type="number" path="questOrbs"/>
-            <form:label path="questDesc">Description:</form:label>
-            <form:errors path="questDesc"/>
-            <form:input path="questDesc"/>
-        </p>
-        <p>
-            <form:label path="loginBonusOrbs">Log-in bonus orbs:</form:label>
-            <form:errors path="loginBonusOrbs"/>
-            <form:input type="number" path="loginBonusOrbs"/>
-            <form:label path="loginBonusDesc">Description:</form:label>
-            <form:errors path="loginBonusDesc"/>
-            <form:input path="loginBonusDesc"/>
-        </p>
-        <p>
-            <form:label path="eventOrbs">Event orbs:</form:label>
-            <form:errors path="eventOrbs"/>
-            <form:input type="number" path="eventOrbs"/>
-            <form:label path="eventDesc">Description:</form:label>
-            <form:errors path="eventDesc"/>
-            <form:input path="eventDesc"/>
-        </p>
-        <p>
-            <form:label path="compensationOrbs">Compensation orbs:</form:label>
-            <form:errors path="compensationOrbs"/>
-            <form:input type="number" path="compensationOrbs"/>
-            <form:label path="compensationDesc">Description:</form:label>
-            <form:errors path="compensationDesc"/>
-            <form:input path="compensationDesc"/>
-        </p>
-        <input type="submit" value="Submit"/>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="storyParalogueOrbs">Story/Paralogue orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="storyParalogueOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="storyParalogueOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="storyParalogueDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="storyParalogueDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="storyParalogueDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="chainChallengeOrbs">Chain Challenge orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="chainChallengeOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="chainChallengeOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="chainChallengeDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="chainChallengeDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="chainChallengeDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="squadAssaultOrbs">Squad Assault orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="squadAssaultOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="squadAssaultOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="squadAssaultDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="squadAssaultDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="squadAssaultDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="arenaOrbs">Arena orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="arenaOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="arenaOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="arenaDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="arenaDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="arenaDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="rivalDomainsOrbs">Rival Domains orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="rivalDomainsOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="rivalDomainsOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="rivalDomainsDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="rivalDomainsDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="rivalDomainsDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="heroBattleOrbs">Hero Battle orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="heroBattleOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="heroBattleOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="heroBattleDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="heroBattleDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="heroBattleDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="tacticsDrillOrbs">Tactics Drill orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="tacticsDrillOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="tacticsDrillOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="tacticsDrillDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="tacticsDrillDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="tacticsDrillDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="allegianceBattleOrbs">Allegiance Battle orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="allegianceBattleOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="allegianceBattleOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="allegianceBattleDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="allegianceBattleDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="allegianceBattleDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="tempestTrialsOrbs">Tempest Trials orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="tempestTrialsOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="tempestTrialsOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="tempestTrialsDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="tempestTrialsDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="tempestTrialsDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="tapBattleOrbs">Tap Battle orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="tapBattleOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="tapBattleOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="tapBattleDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="tapBattleDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="tapBattleDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="grandConquestRokkrSiegesOrbs">Grand Conquest/Rokkr Sieges orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="grandConquestRokkrSiegesOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="grandConquestRokkrSiegesOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="grandConquestRokkrSiegesDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="grandConquestRokkrSiegesDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="grandConquestRokkrSiegesDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="forgingBondsHallOfFormsOrbs">Forging Bonds/Hall of Forms orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="forgingBondsHallOfFormsOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="forgingBondsHallOfFormsOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="forgingBondsHallOfFormsDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="forgingBondsHallOfFormsDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="forgingBondsHallOfFormsDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="lostLoreOrbs">Lost Lore orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="lostLoreOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="lostLoreOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="lostLoreDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="lostLoreDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="lostLoreDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="questOrbs">Quest orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="questOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="questOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="questDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="questDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="questDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="loginBonusOrbs">Log-in bonus orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="loginBonusOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="loginBonusOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="loginBonusDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="loginBonusDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="loginBonusDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="eventOrbs">Event orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="eventOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="eventOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="eventDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="eventDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="eventDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <div class="form-row">
+	        <div class="col-md-6 mb-3">
+		        <form:label path="compensationOrbs">Compensation orbs:</form:label>
+	            <form:input class="form-control inputVal" type="number" path="compensationOrbs"/>
+	            <div class="valid-feedback">
+		            Value OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="compensationOrbs"/>
+		            Value must be non-negative and an integer
+		        </div>
+	    	</div>
+	    	<div class="col-md-6 mb-3">
+		        <form:label path="compensationDesc">Description:</form:label>
+	            <form:input class="form-control inputDesc" path="compensationDesc"/>
+	            <div class="valid-feedback">
+		            Text OK
+		        </div>
+		        <div class="invalid-feedback">
+		            <form:errors path="compensationDesc"/>
+		            Text field cannot be empty if orb value is positive
+		        </div>
+	    	</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
    	</form:form>
 </body>
 </html>
